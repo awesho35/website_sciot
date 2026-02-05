@@ -1,0 +1,152 @@
+{% extends 'admin_custom/base.html' %}
+
+{% block title %}Galerie média{% endblock %}
+{% block page_title %}Galerie média{% endblock %}
+
+{% block extra_css %}
+<style>
+    .media-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+        aspect-ratio: 1;
+    }
+    
+    .media-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
+    }
+    
+    .media-card:hover img {
+        transform: scale(1.05);
+    }
+    
+    .media-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        padding: 1rem;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    
+    .media-card:hover .media-overlay {
+        opacity: 1;
+    }
+    
+    .media-actions {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    
+    .media-card:hover .media-actions {
+        opacity: 1;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-1">Galerie média</h4>
+        <p class="text-muted mb-0">{{ images.paginator.count }} image(s)</p>
+    </div>
+    <a href="{% url 'admin_custom:media_upload' %}" class="btn btn-primary">
+        <i class="bi bi-upload me-2"></i>Uploader
+    </a>
+</div>
+
+<!-- Filtres -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body py-2">
+        <form method="get" class="d-flex gap-3 align-items-center">
+            <label class="form-label mb-0 small">Catégorie :</label>
+            <select name="category" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
+                <option value="">Toutes</option>
+                {% for cat in categories %}
+                <option value="{{ cat.slug }}" {% if request.GET.category == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+</div>
+
+<!-- Galerie -->
+<div class="row g-3">
+    {% for image in images %}
+    <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+        <div class="media-card shadow-sm">
+            <img src="{{ image.file.url }}" alt="{{ image.alt_text|default:image.title }}">
+            <div class="media-actions">
+                <button class="btn btn-sm btn-danger" onclick="deleteImage({{ image.pk }})">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+            <div class="media-overlay">
+                <div class="text-white small">
+                    <div class="text-truncate fw-bold">{{ image.title }}</div>
+                    {% if image.width and image.height %}
+                    <div class="opacity-75">{{ image.width }}×{{ image.height }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <i class="bi bi-images fs-1 text-muted"></i>
+        <p class="text-muted mt-2">Aucune image</p>
+        <a href="{% url 'admin_custom:media_upload' %}" class="btn btn-primary mt-2">Uploader des images</a>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if images.has_other_pages %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if images.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ images.previous_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">Précédent</a>
+        </li>
+        {% endif %}
+        
+        {% for num in images.paginator.page_range %}
+        <li class="page-item {% if images.number == num %}active{% endif %}">
+            <a class="page-link" href="?page={{ num }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">{{ num }}</a>
+        </li>
+        {% endfor %}
+        
+        {% if images.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ images.next_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">Suivant</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+<!-- Form de suppression -->
+<form id="deleteForm" method="post" style="display: none;">
+    {% csrf_token %}
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function deleteImage(id) {
+    if (confirm('Supprimer cette image ?')) {
+        const form = document.getElementById('deleteForm');
+        form.action = `/admin-panel/media/${id}/delete/`;
+        form.submit();
+    }
+}
+</script>
+{% endblock %}

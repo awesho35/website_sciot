@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programmation | Le Sciøt Cial Club</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <style>
+        .event-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15) !important;
+        }
+        
+        .event-image {
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .event-card:hover .event-image {
+            transform: scale(1.05);
+        }
+        
+        .event-date-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--bs-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-align: center;
+            z-index: 2;
+        }
+        
+        .event-date-badge .day {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        
+        .event-date-badge .month {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .month-section {
+            scroll-margin-top: 100px;
+        }
+        
+        .month-header {
+            background: linear-gradient(135deg, var(--bs-primary) 0%, #16213e 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-btn.active {
+            background: var(--bs-primary) !important;
+            color: white !important;
+        }
+        
+        .hero-programmation {
+            background: linear-gradient(135deg, var(--bs-primary) 0%, #16213e 100%);
+            min-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg shadow-sm glass-bar sticky-top">
+        <div class="container">
+            <a class="navbar-brand text-primary" href="index.html">
+                <i class="bi bi-megaphone-fill me-2"></i>LE SCIøT CIAL CLUB
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="programmation.html">Programmation</a></li>
+                    <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="jouerausciot.html">Jouer ici</a></li>
+                </ul>
+                <div class="d-flex ms-lg-4 align-items-center">
+                    <a href="#" class="text-primary fs-4 me-3"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-primary fs-4 me-3"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-primary fs-4 me-3"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-programmation d-flex align-items-center">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 text-white fw-bold mb-3">Programmation</h1>
+                    <p class="lead text-white opacity-75 mb-0">
+                        Concerts, DJ sets, soirées à thème... Découvrez tous les événements du Sciøt Cial Club.
+                    </p>
+                </div>
+                <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                    <div class="d-inline-block bg-white bg-opacity-10 rounded-3 p-3 text-white text-center">
+                        <i class="bi bi-calendar-event fs-2 mb-2 d-block"></i>
+                        <span class="fw-bold">Entrée libre</span><br>
+                        <small class="opacity-75">sur la plupart des événements</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="container py-5">
+        <!-- Filtres -->
+        <div id="filters-container" class="d-flex flex-wrap gap-2 mb-5 justify-content-center">
+            <button class="btn btn-outline-primary filter-btn active" data-filter="all">
+                Tous
+            </button>
+        </div>
+
+        <!-- Container dynamique des événements -->
+        <div id="events-container">
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Chargement...</span>
+                </div>
+                <p class="mt-3 text-muted">Chargement des événements...</p>
+            </div>
+        </div>
+
+        <!-- CTA Newsletter -->
+        <section class="mt-5 p-5 rounded-4 text-center text-white" style="background: linear-gradient(135deg, var(--bs-primary) 0%, #16213e 100%);">
+            <h3 class="mb-3">Ne ratez aucun événement !</h3>
+            <p class="opacity-75 mb-4">Inscrivez-vous à notre newsletter pour recevoir le programme en avant-première.</p>
+            <form class="d-flex justify-content-center gap-2 flex-wrap" style="max-width: 500px; margin: 0 auto;">
+                <input type="email" class="form-control" placeholder="Votre email" style="max-width: 300px;">
+                <button type="submit" class="btn btn-light text-primary fw-bold">S'inscrire</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-bar footer-shadow py-3 mt-auto">
+        <div class="container">
+            <div class="row align-items-center g-3">
+                <div class="col-md-3 text-center text-md-start">
+                    <a href="tel:0233042456" class="text-primary fw-bold">02 33 04 24 56</a>
+                </div>
+                <div class="col-md-5 text-center">
+                    <span class="small opacity-75 text-dark"><i>Sciotot >> Cotentin >> Normandie</i></span>
+                </div>
+                <div class="col-md-4 d-flex align-items-center justify-content-center justify-content-md-end gap-3">
+                    <div class="d-flex gap-3" id="social-links">
+                        <a href="#" class="text-primary fs-5"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-primary fs-4"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-primary fs-4"><i class="bi bi-youtube"></i></a>
+                    </div>
+                    <a href="#" class="btn btn-outline-primary btn-sm px-3 py-2">CONDITIONS D'UTILISATION</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    <script>
+        const MONTHS_FR = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+        const MONTHS_SHORT = ['Janv.', 'Fév.', 'Mars', 'Avr.', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'];
+        
+        let allEvents = [];
+        let categories = [];
+        
+        // Charger les catégories
+        async function loadCategories() {
+            try {
+                categories = await SciotAPI.getEventCategories() || [];
+                const filtersContainer = document.getElementById('filters-container');
+                
+                if (categories.length > 0) {
+                    filtersContainer.innerHTML = `
+                        <button class="btn btn-outline-primary filter-btn active" data-filter="all">Tous</button>
+                        ${categories.map(cat => `
+                            <button class="btn btn-outline-primary filter-btn" data-filter="${cat.slug}">
+                                <i class="bi bi-${cat.icon || 'calendar-event'} me-1"></i>${cat.name}
+                            </button>
+                        `).join('')}
+                    `;
+                    initFilters();
+                }
+            } catch (error) {
+                console.error('Erreur chargement catégories:', error);
+            }
+        }
+        
+        // Charger les événements
+        async function loadEvents() {
+            const container = document.getElementById('events-container');
+            
+            try {
+                allEvents = await SciotAPI.getUpcomingEvents() || [];
+                
+                if (allEvents.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-5">
+                            <i class="bi bi-calendar-x display-1 text-muted mb-3"></i>
+                            <h4 class="text-muted">Aucun événement à venir</h4>
+                            <p class="text-muted">Revenez bientôt pour découvrir notre programmation !</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Grouper par mois
+                const eventsByMonth = {};
+                allEvents.forEach(event => {
+                    const date = new Date(event.date);
+                    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                    if (!eventsByMonth[key]) {
+                        eventsByMonth[key] = {
+                            year: date.getFullYear(),
+                            month: date.getMonth(),
+                            events: []
+                        };
+                    }
+                    eventsByMonth[key].events.push(event);
+                });
+                
+                // Générer le HTML
+                container.innerHTML = Object.keys(eventsByMonth).sort().map(key => {
+                    const monthData = eventsByMonth[key];
+                    return `
+                        <section class="month-section mb-5" id="${MONTHS_FR[monthData.month].toLowerCase()}-${monthData.year}">
+                            <div class="month-header">
+                                <h2 class="mb-0"><i class="bi bi-calendar3 me-3"></i>${MONTHS_FR[monthData.month]} ${monthData.year}</h2>
+                            </div>
+                            <div class="row g-4">
+                                ${monthData.events.map(event => renderEventCard(event)).join('')}
+                            </div>
+                        </section>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Erreur chargement événements:', error);
+                container.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="bi bi-exclamation-triangle display-1 text-warning mb-3"></i>
+                        <h4 class="text-muted">Impossible de charger les événements</h4>
+                        <p class="text-muted">Veuillez réessayer plus tard.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Rendre une carte événement
+        function renderEventCard(event) {
+            const date = new Date(event.date);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = MONTHS_SHORT[date.getMonth()];
+            const categorySlug = event.category?.slug || 'other';
+            const categoryColor = event.category?.color || '#1a1a2e';
+            const categoryName = event.category?.name || 'Événement';
+            const imageUrl = event.image || '/ressources/MjAyMjA0NjMxOGI5ODIwOGQxMzNkMTJjMDViZjE3YTdhZjBmZjY.avif';
+            const time = event.start_time ? event.start_time.substring(0, 5).replace(':', 'h') : '';
+            const endTime = event.end_time ? ' - ' + event.end_time.substring(0, 5).replace(':', 'h') : '';
+            const price = event.is_free ? '<span class="badge bg-success">Entrée libre</span>' : 
+                          `<span class="badge bg-warning text-dark">${parseFloat(event.price).toFixed(0)}€</span>`;
+            
+            return `
+                <div class="col-12 col-md-6 col-lg-4" data-category="${categorySlug}">
+                    <div class="card event-card border-0 shadow-sm h-100">
+                        <div class="position-relative overflow-hidden">
+                            <div class="event-date-badge">
+                                <div class="day">${day}</div>
+                                <div class="month">${month}</div>
+                            </div>
+                            <img src="${imageUrl}" class="card-img-top event-image" alt="${event.title}">
+                        </div>
+                        <div class="card-body">
+                            <span class="badge mb-2" style="background-color: ${categoryColor}">${categoryName}</span>
+                            <h5 class="card-title fw-bold">${event.title}</h5>
+                            <p class="card-text text-muted">${event.short_description || ''}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-primary fw-bold"><i class="bi bi-clock me-1"></i>${time}${endTime}</span>
+                                ${price}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Initialiser les filtres
+        function initFilters() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filter = this.dataset.filter;
+                    
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    document.querySelectorAll('[data-category]').forEach(card => {
+                        if (filter === 'all' || card.dataset.category === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadCategories();
+            await loadEvents();
+            initFilters();
+        });
+    </script>
+</body>
+</html>

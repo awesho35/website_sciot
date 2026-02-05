@@ -1,0 +1,122 @@
+{% extends 'admin_custom/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Nom du plat *</label>
+                        <input type="text" name="name" class="form-control" value="{{ item.name|default:'' }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Catégorie *</label>
+                        <select name="category" class="form-select" required>
+                            <option value="">-- Sélectionner --</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.id }}" {% if item.category_id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="3">{{ item.description|default:'' }}</textarea>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Prix (€) *</label>
+                            <input type="number" name="price" class="form-control" step="0.01" min="0" value="{{ item.price|default:'0' }}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Allergènes</label>
+                        <input type="text" name="allergens" class="form-control" value="{{ item.allergens|default:'' }}" placeholder="Ex: gluten, lactose, fruits à coque...">
+                    </div>
+                    
+                    <hr class="my-4">
+                    <h6 class="text-muted mb-3">OPTIONS</h6>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6 col-md-3">
+                            <div class="form-check">
+                                <input type="checkbox" name="is_vegetarian" class="form-check-input" id="is_vegetarian" {% if item.is_vegetarian %}checked{% endif %}>
+                                <label class="form-check-label" for="is_vegetarian">Végétarien</label>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="form-check">
+                                <input type="checkbox" name="is_vegan" class="form-check-input" id="is_vegan" {% if item.is_vegan %}checked{% endif %}>
+                                <label class="form-check-label" for="is_vegan">Végan</label>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="form-check">
+                                <input type="checkbox" name="is_gluten_free" class="form-check-input" id="is_gluten_free" {% if item.is_gluten_free %}checked{% endif %}>
+                                <label class="form-check-label" for="is_gluten_free">Sans gluten</label>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="form-check">
+                                <input type="checkbox" name="is_spicy" class="form-check-input" id="is_spicy" {% if item.is_spicy %}checked{% endif %}>
+                                <label class="form-check-label" for="is_spicy">Épicé 🌶</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    <h6 class="text-muted mb-3">AFFICHAGE</h6>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input type="checkbox" name="is_available" class="form-check-input" id="is_available" {% if item.is_available or not item %}checked{% endif %}>
+                                <label class="form-check-label" for="is_available">Disponible</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input type="checkbox" name="is_featured" class="form-check-input" id="is_featured" {% if item.is_featured %}checked{% endif %}>
+                                <label class="form-check-label" for="is_featured">
+                                    <i class="bi bi-star-fill text-warning me-1"></i>À la une
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    <h6 class="text-muted mb-3">IMAGE</h6>
+                    
+                    <div class="mb-3">
+                        {% if item.image %}
+                        <div class="mb-2">
+                            <img src="{{ item.image.url }}" class="img-preview">
+                        </div>
+                        {% endif %}
+                        <label class="form-label">Photo du plat</label>
+                        <input type="file" name="image" class="form-control" accept="image/*">
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg me-2"></i>{% if item %}Enregistrer{% else %}Ajouter au menu{% endif %}
+                        </button>
+                        <a href="{% url 'admin_custom:menu' %}" class="btn btn-outline-secondary">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

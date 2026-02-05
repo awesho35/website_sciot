@@ -1,0 +1,74 @@
+{% extends 'admin_custom/base.html' %}
+
+{% block title %}Message{% endblock %}
+{% block page_title %}Détail du message{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="mb-0">{{ msg.subject }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom">
+                    <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                        <i class="bi bi-person fs-4 text-primary"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold">{{ msg.name }}</div>
+                        <div class="text-muted">{{ msg.email }}</div>
+                        {% if msg.phone %}<div class="text-muted small">{{ msg.phone }}</div>{% endif %}
+                    </div>
+                    <div class="ms-auto text-end">
+                        <div class="text-muted small">{{ msg.created_at|date:"l d F Y" }}</div>
+                        <div class="text-muted small">{{ msg.created_at|time:"H:i" }}</div>
+                    </div>
+                </div>
+                
+                <div class="message-content" style="white-space: pre-wrap;">{{ msg.message }}</div>
+            </div>
+        </div>
+        
+        <div class="mt-4 d-flex gap-2">
+            <a href="mailto:{{ msg.email }}?subject=Re: {{ msg.subject }}" class="btn btn-primary">
+                <i class="bi bi-reply me-2"></i>Répondre par email
+            </a>
+            <a href="{% url 'admin_custom:messages' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Retour
+            </a>
+            <form method="post" class="ms-auto" onsubmit="return confirm('Supprimer ce message ?')">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delete">
+                <button type="submit" class="btn btn-outline-danger">
+                    <i class="bi bi-trash me-2"></i>Supprimer
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="col-12 col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0">
+                <h6 class="mb-0">Informations</h6>
+            </div>
+            <div class="card-body">
+                <p class="mb-2">
+                    <strong>Email :</strong><br>
+                    <a href="mailto:{{ msg.email }}">{{ msg.email }}</a>
+                </p>
+                {% if msg.phone %}
+                <p class="mb-2">
+                    <strong>Téléphone :</strong><br>
+                    <a href="tel:{{ msg.phone }}">{{ msg.phone }}</a>
+                </p>
+                {% endif %}
+                <p class="mb-0">
+                    <strong>Reçu le :</strong><br>
+                    {{ msg.created_at|date:"d/m/Y à H:i" }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends 'admin_custom/base.html' %}
+
+{% block title %}Tableau de bord{% endblock %}
+{% block page_title %}Tableau de bord{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    <!-- Stats Cards -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="value">{{ stats.events_upcoming }}</div>
+                    <div class="label">Événements à venir</div>
+                </div>
+                <div class="icon bg-primary bg-opacity-10 text-primary">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="value">{{ stats.events_this_month }}</div>
+                    <div class="label">Ce mois-ci</div>
+                </div>
+                <div class="icon bg-success bg-opacity-10 text-success">
+                    <i class="bi bi-calendar3"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="value">{{ stats.menu_items }}</div>
+                    <div class="label">Plats au menu</div>
+                </div>
+                <div class="icon bg-warning bg-opacity-10 text-warning">
+                    <i class="bi bi-cup-hot"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="value">{{ stats.messages_unread }}</div>
+                    <div class="label">Messages non lus</div>
+                </div>
+                <div class="icon bg-danger bg-opacity-10 text-danger">
+                    <i class="bi bi-envelope"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Prochains événements -->
+    <div class="col-12 col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0 fw-bold">Prochains événements</h5>
+                <a href="{% url 'admin_custom:events' %}" class="btn btn-sm btn-outline-primary">Voir tout</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>Événement</th>
+                                <th>Date</th>
+                                <th>Statut</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for event in upcoming_events %}
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">{{ event.title }}</div>
+                                    {% if event.category %}<small class="text-muted">{{ event.category.name }}</small>{% endif %}
+                                </td>
+                                <td>
+                                    <div>{{ event.date|date:"d/m/Y" }}</div>
+                                    <small class="text-muted">{{ event.start_time|time:"H:i" }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge badge-{{ event.status }}">
+                                        {{ event.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{% url 'admin_custom:event_edit' event.pk %}" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">
+                                    Aucun événement à venir
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Messages récents -->
+    <div class="col-12 col-lg-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0 fw-bold">Messages récents</h5>
+                <a href="{% url 'admin_custom:messages' %}" class="btn btn-sm btn-outline-primary">Voir tout</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    {% for msg in recent_messages %}
+                    <a href="{% url 'admin_custom:message_detail' msg.pk %}" class="list-group-item list-group-item-action">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="fw-bold {% if not msg.is_read %}text-primary{% endif %}">
+                                    {{ msg.name }}
+                                    {% if not msg.is_read %}<span class="badge bg-primary ms-1">Nouveau</span>{% endif %}
+                                </div>
+                                <div class="text-muted small">{{ msg.subject|truncatechars:40 }}</div>
+                            </div>
+                            <small class="text-muted">{{ msg.created_at|date:"d/m" }}</small>
+                        </div>
+                    </a>
+                    {% empty %}
+                    <div class="text-center text-muted py-4">
+                        Aucun message
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Actions rapides -->
+<div class="row g-4 mt-2">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="mb-0 fw-bold">Actions rapides</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-auto">
+                        <a href="{% url 'admin_custom:event_create' %}" class="btn btn-primary">
+                            <i class="bi bi-plus-lg me-2"></i>Nouvel événement
+                        </a>
+                    </div>
+                    <div class="col-auto">
+                        <a href="{% url 'admin_custom:menu_item_create' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-plus-lg me-2"></i>Nouveau plat
+                        </a>
+                    </div>
+                    <div class="col-auto">
+                        <a href="{% url 'admin_custom:media_upload' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-upload me-2"></i>Uploader des images
+                        </a>
+                    </div>
+                    <div class="col-auto">
+                        <a href="{% url 'admin_custom:events_calendar' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-calendar3 me-2"></i>Voir le calendrier
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -23,10 +23,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Programmation</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Menu</a></li>
-                <li class="nav-item"><a class="nav-link" href="jouer.html">Jouer ici</a></li>
+                <li class="nav-item"><a class="nav-link active" href="index.html">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="programmation.html">Programmation</a></li>
+                <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
+                <li class="nav-item"><a class="nav-link" href="jouerausciot.html">Jouer ici</a></li>
             </ul>
             <div class="d-flex ms-lg-4 align-items-center">
                 <a href="#" class="text-primary fs-4 me-3"><i class="bi bi-instagram"></i></a>
@@ -57,53 +57,11 @@
                     <h2 class="text-white fw-bold h3">CETTE SEMAINE</h2>
                     <div class="bg-white opacity-50" style="height: 2px; width: 60px;"></div>
                 </div>
-                <div class="d-flex flex-column gap-3 mb-4">
-                    <div class="card border-0 shadow-sm overflow-hidden" style="background-color: var(--bs-body-bg); height: 130px;">
-                        <div class="row g-0 h-100 align-items-center">
-                            <div class="col-8 p-3">
-                                <span class="badge bg-secondary mb-1">JEU. 15 JANV.</span>
-                                <h5 class="fw-bold mb-1">THA DUNCIZ</h5>
-                                <p class="mb-0 small opacity-75">Groove & Funk explosif.</p>
-                            </div>
-                            <div class="col-4 h-100">
-                                <img src="/ressources/Tha-Dunciz-fiche-de-presentation-HD-1024x683.jpg" class="w-100 h-100 object-fit-cover img-fade-left" alt="1">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card border-0 shadow-sm overflow-hidden" style="background-color: var(--bs-body-bg); height: 130px;">
-                        <div class="row g-0 h-100 align-items-center">
-                            <div class="col-8 p-3">
-                                <span class="badge bg-secondary mb-1">VEN. 16 JANV.</span>
-                                <h5 class="fw-bold mb-1">ZARZHA</h5>
-                                <p class="mb-0 small opacity-75">Balkan & Électro moderne.</p>
-                            </div>
-                            <div class="col-4 h-100">
-                                <img src="/ressources/zarhza_15_photos_cthomas_mougeolle_photography.jpg" class="w-100 h-100 object-fit-cover img-fade-left" alt="2">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card border-0 shadow-sm overflow-hidden" style="background-color: var(--bs-body-bg); height: 130px;">
-                        <div class="row g-0 h-100 align-items-center">
-                            <div class="col-8 p-3">
-                                <span class="badge bg-secondary mb-1">SAM. 17 JANV.</span>
-                                <h5 class="fw-bold mb-1">SUNNY LEGACY</h5>
-                                <p class="mb-0 small opacity-75">Reggae & Dub session.</p>
-                            </div>
-                            <div class="col-4 h-100">
-                                <img src="/ressources/MjAyMjA0NjMxOGI5ODIwOGQxMzNkMTJjMDViZjE3YTdhZjBmZjY.avif" class="w-100 h-100 object-fit-cover img-fade-left" alt="3">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card border-0 shadow-sm overflow-hidden" style="background-color: var(--bs-body-bg); height: 130px;">
-                        <div class="row g-0 h-100 align-items-center">
-                            <div class="col-8 p-3">
-                                <span class="badge bg-secondary mb-1">DIM. 18 JANV.</span>
-                                <h5 class="fw-bold mb-1">COURTOISIE</h5>
-                                <p class="mb-0 small opacity-75">Pop élégante & textes soignés.</p>
-                            </div>
-                            <div class="col-4 h-100">
-                                <img src="/ressources/images-2.jpeg" class="w-100 h-100 object-fit-cover img-fade-left" alt="4">
-                            </div>
+                <div id="week-events-container" class="d-flex flex-column gap-3 mb-4">
+                    <!-- Chargement dynamique des événements -->
+                    <div class="text-center text-white py-5">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Chargement...</span>
                         </div>
                     </div>
                 </div>
@@ -199,5 +157,116 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    <script>
+        // Charger les événements de la semaine
+        async function loadWeekEvents() {
+            const container = document.getElementById('week-events-container');
+            
+            try {
+                const events = await SciotAPI.getWeekEvents();
+                
+                if (!events || events.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center text-white py-4">
+                            <i class="bi bi-calendar-x fs-1 mb-3 d-block opacity-50"></i>
+                            <p class="opacity-75">Pas d'événements cette semaine</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = events.slice(0, 4).map(event => {
+                    const date = SciotUtils.formatDate(event.date);
+                    const imageUrl = event.image || '/ressources/MjAyMjA0NjMxOGI5ODIwOGQxMzNkMTJjMDViZjE3YTdhZjBmZjY.avif';
+                    
+                    return `
+                        <div class="card border-0 shadow-sm overflow-hidden" style="background-color: var(--bs-body-bg); height: 130px;">
+                            <div class="row g-0 h-100 align-items-center">
+                                <div class="col-8 p-3">
+                                    <span class="badge bg-secondary mb-1">${date.formatted}</span>
+                                    <h5 class="fw-bold mb-1">${event.title}</h5>
+                                    <p class="mb-0 small opacity-75">${event.short_description || ''}</p>
+                                </div>
+                                <div class="col-4 h-100">
+                                    <img src="${imageUrl}" class="w-100 h-100 object-fit-cover img-fade-left" alt="${event.title}">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Erreur chargement événements:', error);
+                container.innerHTML = `
+                    <div class="text-center text-white py-4">
+                        <i class="bi bi-exclamation-triangle fs-1 mb-3 d-block opacity-50"></i>
+                        <p class="opacity-75">Impossible de charger les événements</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Charger les slides du carrousel
+        async function loadCarousel() {
+            try {
+                const slides = await SciotAPI.getCarousel();
+                if (!slides || slides.length === 0) return;
+                
+                const inner = document.querySelector('#fullSideCarousel .carousel-inner');
+                inner.innerHTML = slides.map((slide, index) => `
+                    <div class="carousel-item ${index === 0 ? 'active' : ''} h-100" data-bs-interval="5000">
+                        <img src="${slide.image}" class="d-block w-100 h-100 object-fit-cover" alt="${slide.title || ''}">
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Erreur chargement carrousel:', error);
+            }
+        }
+        
+        // Charger la configuration du site
+        async function loadSiteConfig() {
+            try {
+                const config = await SciotAPI.getConfig();
+                if (!config) return;
+                
+                // Mettre à jour le téléphone du footer
+                const phoneLink = document.querySelector('footer a[href^="tel:"]');
+                if (phoneLink && config.phone) {
+                    phoneLink.textContent = config.phone;
+                    phoneLink.href = 'tel:' + config.phone.replace(/\s/g, '');
+                }
+            } catch (error) {
+                console.error('Erreur chargement config:', error);
+            }
+        }
+        
+        // Charger les réseaux sociaux
+        async function loadSocialLinks() {
+            try {
+                const links = await SciotAPI.getSocialLinks();
+                if (!links || links.length === 0) return;
+                
+                const containers = document.querySelectorAll('.d-flex.gap-3');
+                containers.forEach(container => {
+                    if (container.querySelector('[class*="bi-instagram"], [class*="bi-facebook"], [class*="bi-youtube"]')) {
+                        container.innerHTML = links.map(link => 
+                            `<a href="${link.url}" target="_blank" class="text-primary fs-4"><i class="bi bi-${link.platform}"></i></a>`
+                        ).join('');
+                    }
+                });
+            } catch (error) {
+                console.error('Erreur chargement réseaux sociaux:', error);
+            }
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            loadWeekEvents();
+            loadCarousel();
+            loadSiteConfig();
+            loadSocialLinks();
+        });
+    </script>
 </body>
 </html>

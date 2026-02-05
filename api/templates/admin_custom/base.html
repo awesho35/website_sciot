@@ -1,0 +1,406 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} | Sciøt Cial Club</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bs-primary: #1a1a2e;
+            --bs-primary-rgb: 26, 26, 46;
+            --bs-secondary: #16213e;
+            --bs-body-bg: #f8f9fa;
+            --bs-body-color: #212529;
+            --accent-color: #e94560;
+            --sidebar-width: 260px;
+        }
+        
+        * {
+            font-family: 'Jost', sans-serif;
+        }
+        
+        body {
+            background-color: var(--bs-body-bg);
+        }
+        
+        .glass-bar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--bs-primary) 0%, var(--bs-secondary) 100%);
+            z-index: 1000;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar-brand {
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+        
+        .nav-section {
+            padding: 0.5rem 1.5rem;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+        }
+        
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.2s;
+            gap: 0.75rem;
+        }
+        
+        .sidebar-link:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .sidebar-link.active {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border-left: 3px solid var(--accent-color);
+        }
+        
+        .sidebar-link i {
+            font-size: 1.1rem;
+            width: 24px;
+        }
+        
+        /* Main content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+        
+        .top-navbar {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e9ecef;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .page-content {
+            padding: 2rem;
+        }
+        
+        /* Cards */
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: none;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stat-card .icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--bs-primary);
+        }
+        
+        .stat-card .label {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        
+        /* Table */
+        .table-custom {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        
+        .table-custom thead {
+            background: var(--bs-primary);
+            color: white;
+        }
+        
+        .table-custom th {
+            font-weight: 500;
+            padding: 1rem;
+            border: none;
+        }
+        
+        .table-custom td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: var(--bs-primary);
+            border-color: var(--bs-primary);
+        }
+        
+        .btn-primary:hover {
+            background: var(--bs-secondary);
+            border-color: var(--bs-secondary);
+        }
+        
+        .btn-accent {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-accent:hover {
+            background: #d63050;
+            border-color: #d63050;
+            color: white;
+        }
+        
+        /* Status badges */
+        .badge-draft { background: #6c757d; }
+        .badge-published { background: #198754; }
+        .badge-cancelled { background: #dc3545; }
+        .badge-completed { background: #0dcaf0; color: #000; }
+        
+        /* Form styling */
+        .form-control:focus, .form-select:focus {
+            border-color: var(--bs-primary);
+            box-shadow: 0 0 0 0.2rem rgba(26, 26, 46, 0.15);
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: var(--bs-primary);
+        }
+        
+        /* Alerts */
+        .alert-messages {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 9999;
+            max-width: 400px;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 991px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .sidebar-toggle {
+                display: block !important;
+            }
+        }
+        
+        .sidebar-toggle {
+            display: none;
+        }
+        
+        /* Image preview */
+        .img-preview {
+            max-width: 200px;
+            max-height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        /* Calendar */
+        .fc-event {
+            cursor: pointer;
+        }
+        
+        .fc-toolbar-title {
+            font-family: 'Jost', sans-serif !important;
+        }
+        
+        {% block extra_css %}{% endblock %}
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="{% url 'admin_custom:dashboard' %}" class="sidebar-brand">
+                <i class="bi bi-megaphone-fill"></i>
+                SCIøT ADMIN
+            </a>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="{% url 'admin_custom:dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                <i class="bi bi-speedometer2"></i>
+                Tableau de bord
+            </a>
+            
+            <div class="nav-section">Programmation</div>
+            <a href="{% url 'admin_custom:events' %}" class="sidebar-link {% if 'events' in request.resolver_match.url_name %}active{% endif %}">
+                <i class="bi bi-calendar-event"></i>
+                Événements
+            </a>
+            <a href="{% url 'admin_custom:events_calendar' %}" class="sidebar-link {% if request.resolver_match.url_name == 'events_calendar' %}active{% endif %}">
+                <i class="bi bi-calendar3"></i>
+                Calendrier
+            </a>
+            <a href="{% url 'admin_custom:event_categories' %}" class="sidebar-link">
+                <i class="bi bi-tags"></i>
+                Catégories
+            </a>
+            
+            <div class="nav-section">Restauration</div>
+            <a href="{% url 'admin_custom:menu' %}" class="sidebar-link {% if 'menu' in request.resolver_match.url_name %}active{% endif %}">
+                <i class="bi bi-menu-button-wide"></i>
+                Menu
+            </a>
+            <a href="{% url 'admin_custom:drinks' %}" class="sidebar-link">
+                <i class="bi bi-cup-straw"></i>
+                Boissons
+            </a>
+            <a href="{% url 'admin_custom:menu_categories' %}" class="sidebar-link">
+                <i class="bi bi-folder"></i>
+                Catégories Menu
+            </a>
+            
+            <div class="nav-section">Médias</div>
+            <a href="{% url 'admin_custom:media' %}" class="sidebar-link {% if request.resolver_match.url_name == 'media' %}active{% endif %}">
+                <i class="bi bi-images"></i>
+                Galerie
+            </a>
+            <a href="{% url 'admin_custom:carousel' %}" class="sidebar-link">
+                <i class="bi bi-collection-play"></i>
+                Carrousel
+            </a>
+            
+            <div class="nav-section">Communication</div>
+            <a href="{% url 'admin_custom:messages' %}" class="sidebar-link {% if 'message' in request.resolver_match.url_name %}active{% endif %}">
+                <i class="bi bi-envelope"></i>
+                Messages
+                {% if unread_count %}<span class="badge bg-danger ms-auto">{{ unread_count }}</span>{% endif %}
+            </a>
+            
+            <div class="nav-section">Configuration</div>
+            <a href="{% url 'admin_custom:settings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
+                <i class="bi bi-gear"></i>
+                Paramètres
+            </a>
+            <a href="{% url 'admin_custom:social_links' %}" class="sidebar-link">
+                <i class="bi bi-share"></i>
+                Réseaux sociaux
+            </a>
+            
+            <div class="nav-section mt-4"></div>
+            <a href="/" class="sidebar-link" target="_blank">
+                <i class="bi bi-box-arrow-up-right"></i>
+                Voir le site
+            </a>
+            <a href="{% url 'admin_custom:logout' %}" class="sidebar-link text-danger">
+                <i class="bi bi-box-arrow-left"></i>
+                Déconnexion
+            </a>
+        </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Navbar -->
+        <header class="top-navbar d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-link sidebar-toggle me-3 p-0" onclick="document.getElementById('sidebar').classList.toggle('show')">
+                    <i class="bi bi-list fs-4"></i>
+                </button>
+                <h5 class="mb-0">{% block page_title %}Dashboard{% endblock %}</h5>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-muted">{{ user.username }}</span>
+                <div class="dropdown">
+                    <button class="btn btn-link p-0" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle fs-4 text-primary"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'admin_custom:settings' %}"><i class="bi bi-gear me-2"></i>Paramètres</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'admin_custom:logout' %}"><i class="bi bi-box-arrow-left me-2"></i>Déconnexion</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Alerts -->
+        {% if messages %}
+        <div class="alert-messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <!-- Page Content -->
+        <div class="page-content">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

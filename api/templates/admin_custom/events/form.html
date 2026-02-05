@@ -1,0 +1,189 @@
+{% extends 'admin_custom/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h6 class="text-muted mb-3">INFORMATIONS GÉNÉRALES</h6>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Titre de l'événement *</label>
+                        <input type="text" name="title" class="form-control" value="{{ event.title|default:'' }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Sous-titre</label>
+                        <input type="text" name="subtitle" class="form-control" value="{{ event.subtitle|default:'' }}">
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Date *</label>
+                            <input type="date" name="date" class="form-control" value="{{ event.date|date:'Y-m-d'|default:'' }}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Début *</label>
+                            <input type="time" name="start_time" class="form-control" value="{{ event.start_time|time:'H:i'|default:'' }}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Fin</label>
+                            <input type="time" name="end_time" class="form-control" value="{{ event.end_time|time:'H:i'|default:'' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Catégorie</label>
+                            <select name="category" class="form-select">
+                                <option value="">-- Sélectionner --</option>
+                                {% for cat in categories %}
+                                <option value="{{ cat.id }}" {% if event.category_id == cat.id %}selected{% endif %}>{{ cat.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Ouverture des portes</label>
+                            <input type="time" name="doors_open" class="form-control" value="{{ event.doors_open|time:'H:i'|default:'' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Description courte</label>
+                        <input type="text" name="short_description" class="form-control" maxlength="200" value="{{ event.short_description|default:'' }}" placeholder="Affichée sur les cartes">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Description complète</label>
+                        <textarea name="description" class="form-control" rows="4">{{ event.description|default:'' }}</textarea>
+                    </div>
+                    
+                    <hr class="my-4">
+                    <h6 class="text-muted mb-3">ARTISTE / GROUPE</h6>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Nom de l'artiste</label>
+                        <input type="text" name="artist_name" class="form-control" value="{{ event.artist_name|default:'' }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Bio de l'artiste</label>
+                        <textarea name="artist_bio" class="form-control" rows="3">{{ event.artist_bio|default:'' }}</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Site web de l'artiste</label>
+                        <input type="url" name="artist_website" class="form-control" value="{{ event.artist_website|default:'' }}">
+                    </div>
+                    
+                    <hr class="my-4">
+                    <h6 class="text-muted mb-3">BILLETTERIE</h6>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input type="checkbox" name="is_free" class="form-check-input" id="is_free" {% if event.is_free or not event %}checked{% endif %}>
+                                <label class="form-check-label" for="is_free">Entrée gratuite</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Prix (€)</label>
+                            <input type="number" name="price" class="form-control" step="0.01" min="0" value="{{ event.price|default:'0' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Lien billetterie</label>
+                            <input type="url" name="ticket_url" class="form-control" value="{{ event.ticket_url|default:'' }}">
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    <h6 class="text-muted mb-3">IMAGE</h6>
+                    
+                    <div class="mb-3">
+                        {% if event.image %}
+                        <div class="mb-2">
+                            <img src="{{ event.image.url }}" class="img-preview">
+                        </div>
+                        {% endif %}
+                        <label class="form-label">Image de l'événement</label>
+                        <input type="file" name="image" class="form-control" accept="image/*">
+                        <small class="text-muted">Format recommandé : 800x600px, JPG ou PNG</small>
+                    </div>
+                    
+                    <hr class="my-4">
+                    <h6 class="text-muted mb-3">PUBLICATION</h6>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Statut</label>
+                            <select name="status" class="form-select">
+                                <option value="draft" {% if event.status == 'draft' %}selected{% endif %}>Brouillon</option>
+                                <option value="published" {% if event.status == 'published' %}selected{% endif %}>Publié</option>
+                                <option value="cancelled" {% if event.status == 'cancelled' %}selected{% endif %}>Annulé</option>
+                                <option value="completed" {% if event.status == 'completed' %}selected{% endif %}>Terminé</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input type="checkbox" name="is_featured" class="form-check-input" id="is_featured" {% if event.is_featured %}checked{% endif %}>
+                                <label class="form-check-label" for="is_featured">
+                                    <i class="bi bi-star-fill text-warning me-1"></i>Événement à la une
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input type="checkbox" name="is_weekly_highlight" class="form-check-input" id="is_weekly_highlight" {% if event.is_weekly_highlight %}checked{% endif %}>
+                                <label class="form-check-label" for="is_weekly_highlight">
+                                    <i class="bi bi-calendar-week text-info me-1"></i>Afficher dans "Cette semaine"
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg me-2"></i>{% if event %}Enregistrer{% else %}Créer l'événement{% endif %}
+                        </button>
+                        <a href="{% url 'admin_custom:events' %}" class="btn btn-outline-secondary">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0">
+                <h6 class="mb-0">Aide</h6>
+            </div>
+            <div class="card-body">
+                <p class="small text-muted">
+                    <strong>Statuts :</strong><br>
+                    • <span class="badge badge-draft">Brouillon</span> : Non visible sur le site<br>
+                    • <span class="badge badge-published">Publié</span> : Visible sur le site<br>
+                    • <span class="badge badge-cancelled">Annulé</span> : Marqué comme annulé<br>
+                    • <span class="badge badge-completed">Terminé</span> : Événement passé
+                </p>
+                <hr>
+                <p class="small text-muted">
+                    <strong>Options :</strong><br>
+                    • <i class="bi bi-star-fill text-warning"></i> À la une : Mis en avant sur la page d'accueil<br>
+                    • <i class="bi bi-calendar-week text-info"></i> Cette semaine : Affiché dans la section "Cette semaine"
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

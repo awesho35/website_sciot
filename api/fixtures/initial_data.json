@@ -1,0 +1,393 @@
+[
+    {
+        "model": "core.siteconfig",
+        "pk": 1,
+        "fields": {
+            "site_name": "Le Sciøt Cial Club",
+            "tagline": "Bar culturel au cœur du Cotentin",
+            "description": "Le Sciøt Cial Club, c'est Maud & Kiwi et leur super équipe. Le Ø du Sciøt, c'est pour rappeler les origines anglo-scandinaves de Sciotot. « Cial » comme social, parce que nous souhaitons créer un lieu de partage, et « Club » parce que… Bienvenue au Club !",
+            "phone": "02 33 04 24 56",
+            "email": "contact@lesciot.fr",
+            "address_line1": "Route de la Plage, Sciotot",
+            "city": "Les Pieux",
+            "postal_code": "50340",
+            "opening_hours": "Ouvert du mercredi au dimanche de 12h à 2h",
+            "meta_title": "Le Sciøt Cial Club - Bar culturel Cotentin",
+            "meta_description": "Bar culturel, concerts et restauration à Sciotot dans le Cotentin. Découvrez notre programmation et notre menu normand.",
+            "created_at": "2026-01-21T10:00:00Z",
+            "updated_at": "2026-01-21T10:00:00Z"
+        }
+    },
+    {
+        "model": "core.sociallink",
+        "pk": 1,
+        "fields": {
+            "platform": "instagram",
+            "url": "https://www.instagram.com/lesciotcialclub/",
+            "order": 1,
+            "is_active": true
+        }
+    },
+    {
+        "model": "core.sociallink",
+        "pk": 2,
+        "fields": {
+            "platform": "facebook",
+            "url": "https://www.facebook.com/lesciotcialclub/",
+            "order": 2,
+            "is_active": true
+        }
+    },
+    {
+        "model": "core.sociallink",
+        "pk": 3,
+        "fields": {
+            "platform": "youtube",
+            "url": "https://www.youtube.com/@lesciotcialclub",
+            "order": 3,
+            "is_active": true
+        }
+    },
+    {
+        "model": "events.eventcategory",
+        "pk": 1,
+        "fields": {
+            "name": "Concert",
+            "slug": "concert",
+            "color": "#1a1a2e",
+            "icon": "music-note-beamed"
+        }
+    },
+    {
+        "model": "events.eventcategory",
+        "pk": 2,
+        "fields": {
+            "name": "DJ Set",
+            "slug": "dj",
+            "color": "#9b59b6",
+            "icon": "disc"
+        }
+    },
+    {
+        "model": "events.eventcategory",
+        "pk": 3,
+        "fields": {
+            "name": "Soirée",
+            "slug": "soiree",
+            "color": "#f39c12",
+            "icon": "moon-stars"
+        }
+    },
+    {
+        "model": "events.eventcategory",
+        "pk": 4,
+        "fields": {
+            "name": "Brunch",
+            "slug": "brunch",
+            "color": "#e94560",
+            "icon": "cup-hot"
+        }
+    },
+    {
+        "model": "menu.menucategory",
+        "pk": 1,
+        "fields": {
+            "name": "Entrées",
+            "slug": "entrees",
+            "description": "Découvrez nos entrées gourmandes",
+            "order": 1,
+            "is_active": true
+        }
+    },
+    {
+        "model": "menu.menucategory",
+        "pk": 2,
+        "fields": {
+            "name": "Plats",
+            "slug": "plats",
+            "description": "Nos plats signature",
+            "order": 2,
+            "is_active": true
+        }
+    },
+    {
+        "model": "menu.menucategory",
+        "pk": 3,
+        "fields": {
+            "name": "Desserts",
+            "slug": "desserts",
+            "description": "Pour finir en douceur",
+            "order": 3,
+            "is_active": true
+        }
+    },
+    {
+        "model": "menu.menuitem",
+        "pk": 1,
+        "fields": {
+            "category": 1,
+            "name": "Velouté de butternut rôti",
+            "description": "Crème de courge butternut, éclats de noisettes torréfiées et huile de noisette",
+            "price": "8.00",
+            "is_vegetarian": true,
+            "is_gluten_free": true,
+            "is_vegan": false,
+            "is_available": true,
+            "order": 1,
+            "created_at": "2026-01-21T10:00:00Z",
+            "updated_at": "2026-01-21T10:00:00Z"
+        }
+    },
+    {
+        "model": "menu.menuitem",
+        "pk": 2,
+        "fields": {
+            "category": 1,
+            "name": "Huîtres de Saint-Vaast (6 pièces)",
+            "description": "Huîtres spéciales n°3 de Saint-Vaast-la-Hougue, échalotes au vinaigre",
+            "price": "12.00",
+            "is_vegetarian": false,
+            "is_gluten_free": true,
+            "is_vegan": false,
+            "is_available": true,
+            "order": 2,
+            "created_at": "2026-01-21T10:00:00Z",
+            "updated_at": "2026-01-21T10:00:00Z"
+        }
+    },
+    {
+        "model": "menu.menuitem",
+        "pk": 3,
+        "fields": {
+            "category": 1,
+            "name": "Tartare de saumon Label Rouge",
+            "description": "Saumon Label Rouge, avocat, mangue, citron vert et coriandre fraîche",
+            "price": "14.00",
+            "is_vegetarian": false,
+            "is_gluten_free": true,
+            "is_vegan": false,
+            "is_available": true,
+            "order": 3,
+            "created_at": "2026-01-21T10:00:00Z",
+            "updated_at": "2026-01-21T10:00:00Z"
+        }
+    },
+    {
+        "model": "menu.menuitem",
+        "pk": 4,
+        "fields": {
+            "category": 2,
+            "name": "Moules-frites du Sciøt",
+            "description": "Moules de bouchot, sauce marinière au cidre normand, frites maison",
+            "price": "16.00",
+            "is_vegetarian": false,
+            "is_gluten_free": false,
+            "is_vegan": false,
+            "is_available": true,
+            "order": 1,
+            "created_at": "2026-01-21T10:00:00Z",
+            "updated_at": "2026-01-21T10:00:00Z"
+        }
+    },
+    {
+        "model": "menu.menuitem",
+        "pk": 5,
+        "fields": {
+            "category": 2,
+            "name": "Burger Normand",
+            "description": "Bœuf du Cotentin, camembert coulant, compotée d'oignons au cidre, bacon, frites maison",
+            "price": "18.00",
+            "is_vegetarian": false,
+            "is_gluten_free": false,
+            "is_vegan": false,
+            "is_available": true,
+            "order": 2,
+            "created_at": "2026-01-21T10:00:00Z",
+            "updated_at": "2026-01-21T10:00:00Z"
+        }
+    },
+    {
+        "model": "menu.menuitem",
+        "pk": 6,
+        "fields": {
+            "category": 2,
+            "name": "Bowl végétarien",
+            "description": "Quinoa, légumes de saison rôtis, houmous maison, graines et sauce tahini",
+            "price": "15.00",
+            "is_vegetarian": true,
+            "is_gluten_free": true,
+            "is_vegan": true,
+            "is_available": true,
+            "order": 3,
+            "created_at": "2026-01-21T10:00:00Z",
+            "updated_at": "2026-01-21T10:00:00Z"
+        }
+    },
+    {
+        "model": "menu.menuitem",
+        "pk": 7,
+        "fields": {
+            "category": 3,
+            "name": "Tarte aux pommes du Sciøt",
+            "description": "Tarte fine aux pommes du verger, glace vanille et caramel au beurre salé",
+            "price": "8.00",
+            "is_vegetarian": true,
+            "is_gluten_free": false,
+            "is_vegan": false,
+            "is_available": true,
+            "order": 1,
+            "created_at": "2026-01-21T10:00:00Z",
+            "updated_at": "2026-01-21T10:00:00Z"
+        }
+    },
+    {
+        "model": "menu.menuitem",
+        "pk": 8,
+        "fields": {
+            "category": 3,
+            "name": "Teurgoule",
+            "description": "Riz au lait normand cuit longuement à la cannelle, tradition de Normandie",
+            "price": "6.00",
+            "is_vegetarian": true,
+            "is_gluten_free": true,
+            "is_vegan": false,
+            "is_available": true,
+            "order": 2,
+            "created_at": "2026-01-21T10:00:00Z",
+            "updated_at": "2026-01-21T10:00:00Z"
+        }
+    },
+    {
+        "model": "menu.drinkcategory",
+        "pk": 1,
+        "fields": {
+            "name": "Boissons Chaudes",
+            "slug": "boissons-chaudes",
+            "order": 1,
+            "is_active": true
+        }
+    },
+    {
+        "model": "menu.drinkcategory",
+        "pk": 2,
+        "fields": {
+            "name": "Softs",
+            "slug": "softs",
+            "order": 2,
+            "is_active": true
+        }
+    },
+    {
+        "model": "menu.drinkcategory",
+        "pk": 3,
+        "fields": {
+            "name": "Bières",
+            "slug": "bieres",
+            "order": 3,
+            "is_active": true
+        }
+    },
+    {
+        "model": "menu.drinkcategory",
+        "pk": 4,
+        "fields": {
+            "name": "Cocktails",
+            "slug": "cocktails",
+            "order": 4,
+            "is_active": true
+        }
+    },
+    {
+        "model": "menu.drinkitem",
+        "pk": 1,
+        "fields": {
+            "category": 1,
+            "name": "Expresso",
+            "price": "2.00",
+            "order": 1,
+            "is_available": true
+        }
+    },
+    {
+        "model": "menu.drinkitem",
+        "pk": 2,
+        "fields": {
+            "category": 1,
+            "name": "Cappuccino",
+            "price": "4.00",
+            "order": 2,
+            "is_available": true
+        }
+    },
+    {
+        "model": "menu.drinkitem",
+        "pk": 3,
+        "fields": {
+            "category": 3,
+            "name": "Pinte pression",
+            "description": "50cl",
+            "price": "7.00",
+            "order": 1,
+            "is_available": true
+        }
+    },
+    {
+        "model": "menu.drinkitem",
+        "pk": 4,
+        "fields": {
+            "category": 4,
+            "name": "Mojito",
+            "price": "9.00",
+            "order": 1,
+            "is_available": true
+        }
+    },
+    {
+        "model": "menu.drinkitem",
+        "pk": 5,
+        "fields": {
+            "category": 4,
+            "name": "Sciøt Colada",
+            "description": "Rhum, coco, calvados",
+            "price": "10.00",
+            "order": 2,
+            "is_available": true
+        }
+    },
+    {
+        "model": "menu.specialmenu",
+        "pk": 1,
+        "fields": {
+            "name": "Formule Midi",
+            "description": "Du lundi au vendredi",
+            "price": "15.00",
+            "content": "Plat du jour, Dessert du jour, Café ou thé",
+            "is_active": true,
+            "order": 1
+        }
+    },
+    {
+        "model": "menu.specialmenu",
+        "pk": 2,
+        "fields": {
+            "name": "Formule Complète",
+            "description": "Tous les jours",
+            "price": "22.00",
+            "content": "Entrée au choix, Plat au choix, Dessert au choix, Café ou thé",
+            "is_active": true,
+            "order": 2
+        }
+    },
+    {
+        "model": "menu.specialmenu",
+        "pk": 3,
+        "fields": {
+            "name": "Brunch du Dimanche",
+            "description": "11h - 15h",
+            "price": "25.00",
+            "content": "Buffet sucré/salé, Boissons chaudes à volonté, Jus de fruits frais, Animation musicale",
+            "is_active": true,
+            "order": 3
+        }
+    }
+]

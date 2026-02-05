@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu | Le Sciøt Cial Club</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <style>
+        .menu-hero {
+            background: linear-gradient(135deg, var(--bs-primary) 0%, #16213e 100%);
+            min-height: 280px;
+        }
+        
+        .menu-category {
+            scroll-margin-top: 80px;
+        }
+        
+        .menu-category-header {
+            background: var(--bs-primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .menu-item {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+        
+        .menu-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        .menu-item-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--bs-primary);
+            white-space: nowrap;
+        }
+        
+        .menu-item-tags .badge {
+            font-size: 0.7rem;
+            font-weight: 400;
+        }
+        
+        .drink-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .drink-item:last-child {
+            border-bottom: none;
+        }
+        
+        .special-menu-card {
+            border: 2px solid var(--bs-primary);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .special-menu-card .card-header {
+            background: var(--bs-primary);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .special-menu-card .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .menu-nav {
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+            background: white;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .menu-nav-link {
+            color: var(--bs-primary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .menu-nav-link:hover, .menu-nav-link.active {
+            background: var(--bs-primary);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg shadow-sm glass-bar sticky-top">
+        <div class="container">
+            <a class="navbar-brand text-primary" href="index.html">
+                <i class="bi bi-megaphone-fill me-2"></i>LE SCIøT CIAL CLUB
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="programmation.html">Programmation</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="menu.html">Menu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="jouerausciot.html">Jouer ici</a></li>
+                </ul>
+                <div class="d-flex ms-lg-4 align-items-center">
+                    <a href="#" class="text-primary fs-4 me-3"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-primary fs-4 me-3"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-primary fs-4 me-3"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="menu-hero d-flex align-items-center">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 text-white fw-bold mb-3">Notre Menu</h1>
+                    <p class="lead text-white opacity-75 mb-0">
+                        Une cuisine simple et gourmande, des produits locaux et de saison. 
+                        Le Sciøt vous propose une carte qui évolue au fil des saisons.
+                    </p>
+                </div>
+                <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                    <div class="d-inline-block bg-white bg-opacity-10 rounded-3 p-3 text-white text-center">
+                        <i class="bi bi-clock fs-2 mb-2 d-block"></i>
+                        <span class="fw-bold">Service continu</span><br>
+                        <small class="opacity-75">12h - 22h</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Navigation -->
+    <div class="menu-nav">
+        <div class="container">
+            <div id="menu-nav-container" class="d-flex gap-2 overflow-auto pb-2">
+                <a href="#formules" class="menu-nav-link"><i class="bi bi-star me-1"></i>Formules</a>
+                <a href="#plats" class="menu-nav-link"><i class="bi bi-cup-hot me-1"></i>Plats</a>
+                <a href="#boissons" class="menu-nav-link"><i class="bi bi-cup-straw me-1"></i>Boissons</a>
+            </div>
+        </div>
+    </div>
+
+    <main class="container py-5">
+        <!-- Container pour le chargement dynamique -->
+        <div id="menu-container">
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Chargement...</span>
+                </div>
+                <p class="mt-3 text-muted">Chargement du menu...</p>
+            </div>
+        </div>
+
+        <!-- Info allergènes -->
+        <div class="alert alert-light border text-center">
+            <i class="bi bi-info-circle me-2"></i>
+            <strong>Allergènes :</strong> Tous nos plats peuvent contenir des traces d'allergènes. Merci de signaler vos allergies à notre équipe.
+            <br>
+            <span class="badge bg-success me-1">V</span> Végétarien
+            <span class="badge bg-warning text-dark me-1">VG</span> Végan
+            <span class="badge bg-info me-1">SG</span> Sans gluten
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-bar footer-shadow py-3 mt-auto">
+        <div class="container">
+            <div class="row align-items-center g-3">
+                <div class="col-md-3 text-center text-md-start">
+                    <a href="tel:0233042456" class="text-primary fw-bold">02 33 04 24 56</a>
+                </div>
+                <div class="col-md-5 text-center">
+                    <span class="small opacity-75 text-dark"><i>Sciotot >> Cotentin >> Normandie</i></span>
+                </div>
+                <div class="col-md-4 d-flex align-items-center justify-content-center justify-content-md-end gap-3">
+                    <div class="d-flex gap-3" id="social-links">
+                        <a href="#" class="text-primary fs-5"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-primary fs-4"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-primary fs-4"><i class="bi bi-youtube"></i></a>
+                    </div>
+                    <a href="#" class="btn btn-outline-primary btn-sm px-3 py-2">CONDITIONS D'UTILISATION</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    <script>
+        let menuData = null;
+        
+        // Charger le menu complet
+        async function loadMenu() {
+            const container = document.getElementById('menu-container');
+            
+            try {
+                menuData = await SciotAPI.getFullMenu();
+                
+                if (!menuData) {
+                    container.innerHTML = `
+                        <div class="text-center py-5">
+                            <i class="bi bi-exclamation-triangle display-1 text-warning mb-3"></i>
+                            <h4 class="text-muted">Impossible de charger le menu</h4>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                
+                // Formules spéciales
+                if (menuData.special_menus && menuData.special_menus.length > 0) {
+                    html += renderSpecialMenus(menuData.special_menus);
+                }
+                
+                // Catégories de plats
+                if (menuData.food_categories && menuData.food_categories.length > 0) {
+                    html += renderFoodCategories(menuData.food_categories);
+                }
+                
+                // Boissons
+                if (menuData.drink_categories && menuData.drink_categories.length > 0) {
+                    html += renderDrinkCategories(menuData.drink_categories);
+                }
+                
+                container.innerHTML = html || `
+                    <div class="text-center py-5">
+                        <i class="bi bi-journal-x display-1 text-muted mb-3"></i>
+                        <h4 class="text-muted">Le menu est actuellement vide</h4>
+                    </div>
+                `;
+                
+                // Mettre à jour la navigation
+                updateMenuNav();
+                initScrollSpy();
+                
+            } catch (error) {
+                console.error('Erreur chargement menu:', error);
+                container.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="bi bi-exclamation-triangle display-1 text-warning mb-3"></i>
+                        <h4 class="text-muted">Erreur de chargement</h4>
+                    </div>
+                `;
+            }
+        }
+        
+        // Rendre les formules spéciales
+        function renderSpecialMenus(specials) {
+            return `
+                <section class="menu-category mb-5" id="formules">
+                    <h2 class="text-primary mb-4 d-flex align-items-center">
+                        <i class="bi bi-star-fill me-3"></i>Nos Formules
+                    </h2>
+                    <div class="row g-4">
+                        ${specials.map((menu, index) => `
+                            <div class="col-md-4">
+                                <div class="special-menu-card h-100">
+                                    <div class="card-header" ${index === 2 ? 'style="background: #e94560;"' : ''}>
+                                        <h4 class="mb-1">${menu.name}</h4>
+                                        <small class="opacity-75">${menu.description || ''}</small>
+                                        <div class="price mt-2">${parseFloat(menu.price).toFixed(0)}€</div>
+                                    </div>
+                                    <div class="card-body p-4">
+                                        <ul class="list-unstyled mb-0">
+                                            ${menu.includes ? menu.includes.split(',').map(item => `
+                                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>${item.trim()}</li>
+                                            `).join('') : ''}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+        }
+        
+        // Rendre les catégories de plats
+        function renderFoodCategories(categories) {
+            return categories.map(cat => `
+                <section class="menu-category mb-5" id="${cat.slug}">
+                    <div class="card border-0 shadow-sm">
+                        <div class="menu-category-header">
+                            <h3 class="mb-0"><i class="bi bi-${getCategoryIcon(cat.name)} me-2"></i>${cat.name}</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            ${cat.items && cat.items.length > 0 ? cat.items.map(item => `
+                                <div class="menu-item d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1 me-3">
+                                        <h5 class="mb-1">${item.name}</h5>
+                                        <p class="text-muted mb-1 small">${item.description || ''}</p>
+                                        <div class="menu-item-tags">
+                                            ${item.is_vegetarian ? '<span class="badge bg-success me-1">Végétarien</span>' : ''}
+                                            ${item.is_vegan ? '<span class="badge bg-warning text-dark me-1">Végan</span>' : ''}
+                                            ${item.is_gluten_free ? '<span class="badge bg-info me-1">Sans gluten</span>' : ''}
+                                        </div>
+                                    </div>
+                                    <div class="menu-item-price">${parseFloat(item.price).toFixed(0)}€</div>
+                                </div>
+                            `).join('') : '<p class="text-muted p-4">Aucun plat dans cette catégorie</p>'}
+                        </div>
+                    </div>
+                </section>
+            `).join('');
+        }
+        
+        // Rendre les catégories de boissons
+        function renderDrinkCategories(categories) {
+            return `
+                <section class="menu-category mb-5" id="boissons">
+                    <h2 class="text-primary mb-4 d-flex align-items-center">
+                        <i class="bi bi-cup-straw me-3"></i>Nos Boissons
+                    </h2>
+                    <div class="row g-4">
+                        ${categories.map(cat => `
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card border-0 shadow-sm h-100">
+                                    <div class="card-header" style="background: ${getDrinkCategoryColor(cat.name)}; color: white;">
+                                        <h5 class="mb-0"><i class="bi bi-${cat.icon || 'cup'} me-2"></i>${cat.name}</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        ${cat.items && cat.items.length > 0 ? cat.items.map(item => `
+                                            <div class="drink-item">
+                                                <span>${item.name}${item.description ? ` <small class="text-muted">(${item.description})</small>` : ''}</span>
+                                                <span class="fw-bold">${parseFloat(item.price).toFixed(0)}€</span>
+                                            </div>
+                                        `).join('') : '<p class="text-muted">Aucune boisson</p>'}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+        }
+        
+        // Icône par catégorie
+        function getCategoryIcon(name) {
+            const icons = {
+                'entrées': 'egg-fried',
+                'plats': 'cup-hot',
+                'desserts': 'cake2'
+            };
+            return icons[name.toLowerCase()] || 'journal';
+        }
+        
+        // Couleur par catégorie de boisson
+        function getDrinkCategoryColor(name) {
+            const colors = {
+                'boissons chaudes': '#343a40',
+                'softs': '#3498db',
+                'bières': '#f39c12',
+                'vins': '#8e44ad',
+                'cocktails': '#e74c3c'
+            };
+            return colors[name.toLowerCase()] || '#1a1a2e';
+        }
+        
+        // Mettre à jour la navigation
+        function updateMenuNav() {
+            const navContainer = document.getElementById('menu-nav-container');
+            let navItems = ['<a href="#formules" class="menu-nav-link"><i class="bi bi-star me-1"></i>Formules</a>'];
+            
+            if (menuData && menuData.categories) {
+                menuData.categories.forEach(cat => {
+                    navItems.push(`<a href="#${cat.slug}" class="menu-nav-link"><i class="bi bi-${getCategoryIcon(cat.name)} me-1"></i>${cat.name}</a>`);
+                });
+            }
+            
+            navItems.push('<a href="#boissons" class="menu-nav-link"><i class="bi bi-cup-straw me-1"></i>Boissons</a>');
+            navContainer.innerHTML = navItems.join('');
+        }
+        
+        // Scroll spy
+        function initScrollSpy() {
+            const sections = document.querySelectorAll('.menu-category');
+            const navLinks = document.querySelectorAll('.menu-nav-link');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 150;
+                    if (pageYOffset >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', loadMenu);
+    </script>
+</body>
+</html>

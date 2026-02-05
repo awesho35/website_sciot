@@ -1,0 +1,91 @@
+{% extends 'admin_custom/base.html' %}
+
+{% block title %}Catégories d'événements{% endblock %}
+{% block page_title %}Catégories d'événements{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0">Catégories existantes</h5>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Couleur</th>
+                            <th>Nom</th>
+                            <th>Slug</th>
+                            <th>Événements</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cat in categories %}
+                        <tr>
+                            <td>
+                                <span class="d-inline-block rounded-circle" style="width: 24px; height: 24px; background-color: {{ cat.color }};"></span>
+                            </td>
+                            <td class="fw-bold">{{ cat.name }}</td>
+                            <td><code>{{ cat.slug }}</code></td>
+                            <td>{{ cat.events_count }}</td>
+                            <td>
+                                <form method="post" class="d-inline" onsubmit="return confirm('Supprimer cette catégorie ?')">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="category_id" value="{{ cat.id }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" {% if cat.events_count > 0 %}disabled title="Impossible de supprimer une catégorie avec des événements"{% endif %}>
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">
+                                Aucune catégorie créée
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0">
+                <h5 class="mb-0">Nouvelle catégorie</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="create">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Nom</label>
+                        <input type="text" name="name" class="form-control" required placeholder="Ex: Concert">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Slug</label>
+                        <input type="text" name="slug" class="form-control" required placeholder="Ex: concert">
+                        <small class="text-muted">Identifiant URL (lettres minuscules, tirets)</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Couleur</label>
+                        <input type="color" name="color" class="form-control form-control-color" value="#1a1a2e">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-plus-lg me-2"></i>Créer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

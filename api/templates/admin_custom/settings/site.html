@@ -1,0 +1,157 @@
+{% extends 'admin_custom/base.html' %}
+
+{% block title %}Paramètres{% endblock %}
+{% block page_title %}Paramètres du site{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0">Informations générales</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nom du site</label>
+                        <input type="text" name="site_name" class="form-control" value="{{ config.site_name }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Slogan</label>
+                        <input type="text" name="tagline" class="form-control" value="{{ config.tagline }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="3">{{ config.description }}</textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0">Contact</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Téléphone</label>
+                            <input type="text" name="phone" class="form-control" value="{{ config.phone }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" value="{{ config.email }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0">Adresse</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Adresse ligne 1</label>
+                        <input type="text" name="address_line1" class="form-control" value="{{ config.address_line1 }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Adresse ligne 2</label>
+                        <input type="text" name="address_line2" class="form-control" value="{{ config.address_line2 }}">
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Code postal</label>
+                            <input type="text" name="postal_code" class="form-control" value="{{ config.postal_code }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Ville</label>
+                            <input type="text" name="city" class="form-control" value="{{ config.city }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Région</label>
+                            <input type="text" name="region" class="form-control" value="{{ config.region }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0">Google Maps</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">URL Google Maps Embed</label>
+                        <input type="url" name="google_maps_embed_url" class="form-control" value="{{ config.google_maps_embed_url }}">
+                        <small class="text-muted">URL pour intégrer la carte</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">URL Google Maps Directions</label>
+                        <input type="url" name="google_maps_directions_url" class="form-control" value="{{ config.google_maps_directions_url }}">
+                        <small class="text-muted">URL pour le bouton "Y aller"</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0">Horaires d'ouverture</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <textarea name="opening_hours" class="form-control" rows="4" placeholder="Ex: Lundi - Vendredi: 10h - 22h&#10;Samedi: 10h - 00h&#10;Dimanche: Fermé">{{ config.opening_hours }}</textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0">SEO</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Meta Title</label>
+                        <input type="text" name="meta_title" class="form-control" value="{{ config.meta_title }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Meta Description</label>
+                        <textarea name="meta_description" class="form-control" rows="2">{{ config.meta_description }}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-12 col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0">Logo</h5>
+                </div>
+                <div class="card-body">
+                    {% if config.logo %}
+                    <div class="mb-3">
+                        <img src="{{ config.logo.url }}" class="img-fluid rounded" style="max-height: 100px;">
+                    </div>
+                    {% endif %}
+                    <input type="file" name="logo" class="form-control" accept="image/*">
+                </div>
+            </div>
+            
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-check-lg me-2"></i>Enregistrer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

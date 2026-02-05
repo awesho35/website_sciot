@@ -1,0 +1,175 @@
+{% extends 'admin_custom/base.html' %}
+
+{% block title %}Upload{% endblock %}
+{% block page_title %}Uploader des images{% endblock %}
+
+{% block extra_css %}
+<style>
+    .upload-zone {
+        border: 2px dashed #dee2e6;
+        border-radius: 12px;
+        padding: 3rem;
+        text-align: center;
+        background: #f8f9fa;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+    
+    .upload-zone:hover,
+    .upload-zone.dragover {
+        border-color: var(--bs-primary);
+        background: rgba(26, 26, 46, 0.05);
+    }
+    
+    .upload-zone i {
+        font-size: 3rem;
+        color: #6c757d;
+    }
+    
+    .preview-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .preview-item {
+        width: 100px;
+        height: 100px;
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .preview-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .preview-item .remove {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        background: rgba(220, 53, 69, 0.9);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" id="uploadForm">
+                    {% csrf_token %}
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Catégorie (optionnel)</label>
+                        <select name="category" class="form-select">
+                            <option value="">Sans catégorie</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.id }}">{{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+                        <i class="bi bi-cloud-upload mb-3"></i>
+                        <h5>Glissez vos images ici</h5>
+                        <p class="text-muted mb-0">ou cliquez pour sélectionner des fichiers</p>
+                        <input type="file" name="files" id="fileInput" multiple accept="image/*" class="d-none">
+                    </div>
+                    
+                    <div class="preview-container" id="previewContainer"></div>
+                    
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
+                            <i class="bi bi-upload me-2"></i>Uploader
+                        </button>
+                        <a href="{% url 'admin_custom:media' %}" class="btn btn-outline-secondary">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0">
+                <h6 class="mb-0">Informations</h6>
+            </div>
+            <div class="card-body">
+                <p class="small text-muted mb-2">
+                    <i class="bi bi-check-circle text-success me-2"></i>Formats acceptés : JPG, PNG, GIF, WebP
+                </p>
+                <p class="small text-muted mb-2">
+                    <i class="bi bi-check-circle text-success me-2"></i>Taille max recommandée : 5 Mo
+                </p>
+                <p class="small text-muted mb-0">
+                    <i class="bi bi-check-circle text-success me-2"></i>Upload multiple possible
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const uploadZone = document.getElementById('uploadZone');
+const fileInput = document.getElementById('fileInput');
+const previewContainer = document.getElementById('previewContainer');
+const submitBtn = document.getElementById('submitBtn');
+
+// Drag and drop
+uploadZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadZone.classList.add('dragover');
+});
+
+uploadZone.addEventListener('dragleave', () => {
+    uploadZone.classList.remove('dragover');
+});
+
+uploadZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadZone.classList.remove('dragover');
+    fileInput.files = e.dataTransfer.files;
+    updatePreview();
+});
+
+fileInput.addEventListener('change', updatePreview);
+
+function updatePreview() {
+    previewContainer.innerHTML = '';
+    const files = fileInput.files;
+    
+    if (files.length > 0) {
+        submitBtn.disabled = false;
+        
+        Array.from(files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const div = document.createElement('div');
+                div.className = 'preview-item';
+                div.innerHTML = `
+                    <img src="${e.target.result}" alt="">
+                `;
+                previewContainer.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
+    } else {
+        submitBtn.disabled = true;
+    }
+}
+</script>
+{% endblock %}

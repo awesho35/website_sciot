@@ -1,0 +1,164 @@
+{% extends 'admin_custom/base.html' %}
+
+{% block title %}Calendrier{% endblock %}
+{% block page_title %}Calendrier des événements{% endblock %}
+
+{% block extra_css %}
+<style>
+    #calendar {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    }
+    
+    .fc-toolbar-title {
+        font-weight: 600 !important;
+    }
+    
+    .fc-button-primary {
+        background: var(--bs-primary) !important;
+        border-color: var(--bs-primary) !important;
+    }
+    
+    .fc-button-primary:hover {
+        background: var(--bs-secondary) !important;
+    }
+    
+    .fc-event {
+        cursor: pointer;
+        padding: 2px 5px;
+    }
+    
+    .fc-daygrid-day.fc-day-today {
+        background: rgba(26, 26, 46, 0.05) !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-1">Calendrier</h4>
+        <p class="text-muted mb-0">Visualisez et gérez vos événements</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{% url 'admin_custom:events' %}" class="btn btn-outline-primary">
+            <i class="bi bi-list me-2"></i>Vue liste
+        </a>
+        <a href="{% url 'admin_custom:event_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-2"></i>Nouvel événement
+        </a>
+    </div>
+</div>
+
+<!-- Légende -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body py-2">
+        <div class="d-flex flex-wrap gap-3 align-items-center">
+            <span class="fw-bold small">Légende :</span>
+            {% for cat in categories %}
+            <span class="d-flex align-items-center gap-1">
+                <span class="rounded-circle d-inline-block" style="width: 12px; height: 12px; background-color: {{ cat.color }};"></span>
+                <span class="small">{{ cat.name }}</span>
+            </span>
+            {% endfor %}
+            <span class="d-flex align-items-center gap-1">
+                <span class="rounded-circle d-inline-block" style="width: 12px; height: 12px; background-color: #6c757d;"></span>
+                <span class="small">Brouillon</span>
+            </span>
+            <span class="d-flex align-items-center gap-1">
+                <span class="rounded-circle d-inline-block" style="width: 12px; height: 12px; background-color: #dc3545;"></span>
+                <span class="small">Annulé</span>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div id="calendar"></div>
+
+<!-- Modal détail événement -->
+<div class="modal fade" id="eventModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventModalTitle">Événement</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Date :</strong> <span id="eventModalDate"></span></p>
+                <p><strong>Heure :</strong> <span id="eventModalTime"></span></p>
+                <p><strong>Catégorie :</strong> <span id="eventModalCategory"></span></p>
+                <p><strong>Statut :</strong> <span id="eventModalStatus"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                <a href="#" id="eventModalEdit" class="btn btn-primary">
+                    <i class="bi bi-pencil me-2"></i>Modifier
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'fr',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,listWeek'
+        },
+        buttonText: {
+            today: "Aujourd'hui",
+            month: 'Mois',
+            week: 'Semaine',
+            list: 'Liste'
+        },
+        events: '{% url "admin_custom:api_events_calendar" %}',
+        eventClick: function(info) {
+            var event = info.event;
+            var props = event.extendedProps;
+            
+            document.getElementById('eventModalTitle').textContent = event.title;
+            document.getElementById('eventModalDate').textContent = event.start.toLocaleDateString('fr-FR', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            document.getElementById('eventModalTime').textContent = event.start.toLocaleTimeString('fr-FR', {
+                hour: '2-digit', minute: '2-digit'
+            });
+            document.getElementById('eventModalCategory').textContent = props.category || '-';
+            
+            var statusLabels = {
+                'draft': 'Brouillon',
+                'published': 'Publié',
+                'cancelled': 'Annulé',
+                'completed': 'Terminé'
+            };
+            document.getElementById('eventModalStatus').textContent = statusLabels[props.status] || props.status;
+            
+            document.getElementById('eventModalEdit').href = '/admin-panel/events/' + event.id + '/edit/';
+            
+            new bootstrap.Modal(document.getElementById('eventModal')).show();
+        },
+        dateClick: function(info) {
+            // Créer un événement à cette date
+            window.location.href = '{% url "admin_custom:event_create" %}?date=' + info.dateStr;
+        },
+        eventDidMount: function(info) {
+            // Tooltip
+            info.el.setAttribute('title', info.event.title);
+        }
+    });
+    
+    calendar.render();
+});
+</script>
+{% endblock %}
