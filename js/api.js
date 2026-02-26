@@ -102,8 +102,8 @@ const SciotAPI = {
         return this.get(API_CONFIG.endpoints.eventsWeek);
     },
     
-    async getUpcomingEvents() {
-        return this.get(API_CONFIG.endpoints.eventsUpcoming);
+    async getUpcomingEvents(limit = 50) {
+        return this.get(`${API_CONFIG.endpoints.eventsUpcoming}?limit=${limit}`);
     },
     
     async getCalendarEvents(start, end) {
@@ -174,7 +174,8 @@ const SciotUtils = {
      * Formate une date pour l'affichage
      */
     formatDate(dateString) {
-        const date = new Date(dateString);
+        // Ajouter T00:00:00 pour forcer l'interprétation en heure locale (pas UTC)
+        const date = new Date(dateString.includes('T') ? dateString : dateString + 'T00:00:00');
         const days = ['DIM', 'LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM'];
         const months = ['JANV', 'FÉV', 'MARS', 'AVR', 'MAI', 'JUIN', 'JUIL', 'AOÛT', 'SEPT', 'OCT', 'NOV', 'DÉC'];
         

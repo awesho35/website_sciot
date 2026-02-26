@@ -122,7 +122,8 @@ def event_create(request):
         event.subtitle = request.POST.get('subtitle', '')
         event.description = request.POST.get('description', '')
         event.short_description = request.POST.get('short_description', '')
-        event.date = request.POST.get('date')
+        date_str = request.POST.get('date')
+        event.date = datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else None
         event.start_time = request.POST.get('start_time')
         event.end_time = request.POST.get('end_time') or None
         event.doors_open = request.POST.get('doors_open') or None
@@ -169,7 +170,8 @@ def event_edit(request, pk):
         event.subtitle = request.POST.get('subtitle', '')
         event.description = request.POST.get('description', '')
         event.short_description = request.POST.get('short_description', '')
-        event.date = request.POST.get('date')
+        date_str = request.POST.get('date')
+        event.date = datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else None
         event.start_time = request.POST.get('start_time')
         event.end_time = request.POST.get('end_time') or None
         event.doors_open = request.POST.get('doors_open') or None

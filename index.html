@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg shadow-sm glass-bar">
@@ -28,17 +28,17 @@
                 <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
                 <li class="nav-item"><a class="nav-link" href="jouerausciot.html">Jouer ici</a></li>
             </ul>
-            <div class="d-flex ms-lg-4 align-items-center">
-                <a href="#" class="text-primary fs-4 me-3"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="text-primary fs-4 me-3"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="text-primary fs-4 me-3"><i class="bi bi-youtube"></i></a>
+            <div class="d-flex ms-lg-4 align-items-center gap-3" id="nav-social-links">
+                <a href="#" class="text-primary fs-4"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="text-primary fs-4"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="text-primary fs-4"><i class="bi bi-youtube"></i></a>
             </div>
         </div>
     </div>
 </nav>
     <main class="container-fluid p-0">
         <div class="position-relative overflow-hidden bg-dark d-flex align-items-center justify-content-center" style="min-height: 50vh;">
-            <img src="/ressources/542230372_763789346415345_4832126966196685008_n.jpg" 
+            <img src="ressources/542230372_763789346415345_4832126966196685008_n.jpg" 
                  class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover opacity-50"
                  style="filter: blur(8px); transform: scale(1.1);" 
                  alt="Bannière Club">
@@ -47,7 +47,7 @@
                 <p class="lead text-white mb-5 opacity-75 mx-auto" style="max-width: 800px;">
                     Le Sciøt Cial Club, c’est Maud & Kiwi et leur super équipe. Le Ø du Sciøt, c’est pour rappeler les origines anglo-scandinaves de Sciotot. « Cial » comme social, parce que nous souhaitons créer un lieu de partage, et « Club » parce que… Bienvenue au Club !
                 </p>
-                <button class="btn btn-primary btn-lg px-5 py-3 shadow border-0">Découvrir le menu</button>
+                <a href="menu.html" class="btn btn-primary btn-lg px-5 py-3 shadow border-0">Découvrir le menu</a>
             </div>
         </div>
 
@@ -74,15 +74,15 @@
               <div id="fullSideCarousel" class="carousel slide carousel-fade flex-grow-0" data-bs-ride="carousel" style="height: 400px;">
     <div class="carousel-inner h-100">
         <div class="carousel-item active h-100" data-bs-interval="5000">
-            <img src="/ressources/484509130_630001383127476_2751106827163972482_n.jpg" class="d-block w-100 h-100 object-fit-cover" alt="1">
+            <img src="ressources/484509130_630001383127476_2751106827163972482_n.jpg" class="d-block w-100 h-100 object-fit-cover" alt="1">
         </div>
         
         <div class="carousel-item h-100" data-bs-interval="5000">
-            <img src="/ressources/484870281_630918263035788_2045101471280712088_n.jpg" class="d-block w-100 h-100 object-fit-cover" alt="2">
+            <img src="ressources/484870281_630918263035788_2045101471280712088_n.jpg" class="d-block w-100 h-100 object-fit-cover" alt="2">
         </div>
         
         <div class="carousel-item h-100" data-bs-interval="5000">
-            <img src="/ressources/604719571_852260364234909_7465889495457283485_n.jpg" class="d-block w-100 h-100 object-fit-cover" alt="3">
+            <img src="ressources/604719571_852260364234909_7465889495457283485_n.jpg" class="d-block w-100 h-100 object-fit-cover" alt="3">
         </div>
     </div>
 
@@ -157,7 +157,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/api.js"></script>
+    <script src="js/api.js"></script>
     <script>
         // Charger les événements de la semaine
         async function loadWeekEvents() {
@@ -178,18 +178,30 @@
                 
                 container.innerHTML = events.slice(0, 4).map(event => {
                     const date = SciotUtils.formatDate(event.date);
-                    const imageUrl = event.image || '/ressources/MjAyMjA0NjMxOGI5ODIwOGQxMzNkMTJjMDViZjE3YTdhZjBmZjY.avif';
+                    // Construire l'URL de l'image (peut être absolue ou relative)
+                    let imageUrl = 'ressources/MjAyMjA0NjMxOGI5ODIwOGQxMzNkMTJjMDViZjE3YTdhZjBmZjY.avif';
+                    if (event.image) {
+                        imageUrl = event.image.startsWith('http') ? event.image : `http://localhost:8000${event.image}`;
+                    }
+                    const time = event.start_time ? SciotUtils.formatTime(event.start_time) : '';
+                    const categoryName = event.category?.name || '';
+                    const categoryColor = event.category?.color || '#6c757d';
                     
                     return `
                         <div class="card border-0 shadow-sm overflow-hidden" style="background-color: var(--bs-body-bg); height: 130px;">
                             <div class="row g-0 h-100 align-items-center">
                                 <div class="col-8 p-3">
-                                    <span class="badge bg-secondary mb-1">${date.formatted}</span>
-                                    <h5 class="fw-bold mb-1">${event.title}</h5>
-                                    <p class="mb-0 small opacity-75">${event.short_description || ''}</p>
+                                    <div class="d-flex gap-2 mb-1 align-items-center flex-wrap">
+                                        <span class="badge bg-secondary">${date.formatted}</span>
+                                        ${categoryName ? `<span class="badge" style="background-color:${categoryColor}">${categoryName}</span>` : ''}
+                                        ${time ? `<span class="small text-muted"><i class="bi bi-clock me-1"></i>${time}</span>` : ''}
+                                    </div>
+                                    <h5 class="fw-bold mb-1 lh-sm" style="font-size:.95rem">${event.title}</h5>
+                                    <p class="mb-0 small opacity-75 text-truncate">${event.short_description || ''}</p>
                                 </div>
                                 <div class="col-4 h-100">
-                                    <img src="${imageUrl}" class="w-100 h-100 object-fit-cover img-fade-left" alt="${event.title}">
+                                    <img src="${imageUrl}" class="w-100 h-100 object-fit-cover img-fade-left" alt="${event.title}"
+                                         onerror="this.src='ressources/MjAyMjA0NjMxOGI5ODIwOGQxMzNkMTJjMDViZjE3YTdhZjBmZjY.avif'">
                                 </div>
                             </div>
                         </div>
@@ -210,7 +222,8 @@
         // Charger les slides du carrousel
         async function loadCarousel() {
             try {
-                const slides = await SciotAPI.getCarousel();
+                const response = await SciotAPI.getCarousel();
+                const slides = response?.results || response || [];
                 if (!slides || slides.length === 0) return;
                 
                 const inner = document.querySelector('#fullSideCarousel .carousel-inner');
@@ -244,10 +257,11 @@
         // Charger les réseaux sociaux
         async function loadSocialLinks() {
             try {
-                const links = await SciotAPI.getSocialLinks();
+                const response = await SciotAPI.getSocialLinks();
+                const links = response?.results || response || [];
                 if (!links || links.length === 0) return;
                 
-                const containers = document.querySelectorAll('.d-flex.gap-3');
+                const containers = document.querySelectorAll('.d-flex.gap-3, #nav-social-links');
                 containers.forEach(container => {
                     if (container.querySelector('[class*="bi-instagram"], [class*="bi-facebook"], [class*="bi-youtube"]')) {
                         container.innerHTML = links.map(link => 

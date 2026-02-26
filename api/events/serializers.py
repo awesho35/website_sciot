@@ -10,8 +10,7 @@ class EventCategorySerializer(serializers.ModelSerializer):
 
 class EventListSerializer(serializers.ModelSerializer):
     """Serializer pour les listes d'événements"""
-    category_name = serializers.CharField(source='category.name', read_only=True)
-    category_color = serializers.CharField(source='category.color', read_only=True)
+    category = EventCategorySerializer(read_only=True)
     formatted_date = serializers.ReadOnlyField()
     is_past = serializers.ReadOnlyField()
     is_upcoming = serializers.ReadOnlyField()
@@ -19,9 +18,10 @@ class EventListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [
-            'id', 'title', 'slug', 'short_description', 'date', 'start_time',
-            'category', 'category_name', 'category_color', 'image', 'thumbnail',
-            'price', 'is_free', 'is_featured', 'is_weekly_highlight',
+            'id', 'title', 'slug', 'subtitle', 'short_description', 'date', 'start_time',
+            'end_time', 'doors_open', 'category', 'image', 'thumbnail',
+            'price', 'is_free', 'ticket_url', 'artist_name',
+            'is_featured', 'is_weekly_highlight',
             'formatted_date', 'is_past', 'is_upcoming', 'status'
         ]
 

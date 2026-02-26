@@ -67,15 +67,15 @@ class EventViewSet(viewsets.ModelViewSet):
     def week(self, request):
         """Événements de la semaine en cours"""
         events = Event.get_this_week_events()
-        serializer = EventListSerializer(events, many=True)
+        serializer = self.get_serializer(events, many=True)
         return Response(serializer.data)
     
     @action(detail=False, methods=['get'])
     def upcoming(self, request):
         """Prochains événements"""
-        limit = int(request.query_params.get('limit', 10))
+        limit = int(request.query_params.get('limit', 50))
         events = Event.get_upcoming_events(limit=limit)
-        serializer = EventListSerializer(events, many=True)
+        serializer = self.get_serializer(events, many=True)
         return Response(serializer.data)
     
     @action(detail=False, methods=['get'])
