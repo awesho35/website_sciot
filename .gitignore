@@ -1,3 +1,10 @@
 .DS_Store
 venv/
 build/
+
+# Secrets — never commit these
+.env
+
+# SQLite dev database — production uses a Docker volume
+api/db.sqlite3
+api/media/

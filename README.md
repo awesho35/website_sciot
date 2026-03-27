@@ -151,3 +151,52 @@ L'interface admin (`/admin-panel/`) utilise le même design que le site public :
 ## 📝 License
 
 Propriétaire - Le Sciøt Cial Club © 2024
+
+---
+
+## 🚀 Déploiement sur Ondes HOST
+
+### Architecture Docker
+
+Le `docker-compose.yml` contient trois services :
+
+| Service | Rôle |
+|---------|------|
+| `api` | Django 5 + Gunicorn (port 8000, interne) |
+| `frontend` | NGINX servant les fichiers HTML/CSS/JS statiques (port 80, interne) |
+| `nginx` | Reverse-proxy interne exposé sur le **port 8082** → routé par Ondes HOST |
+
+> Le port 8082 est un port non-plateforme : Ondes HOST le détecte comme routeur interne et ne le supprime **pas** au déploiement.
+
+### Variables d'environnement à configurer dans Ondes HOST
+
+Dans le panneau **Stack Detail → Environment Variables**, renseigner :
+
+```
+SECRET_KEY=<générer avec : python -c "import secrets; print(secrets.token_urlsafe(50))">
+DEBUG=False
+DJANGO_ALLOWED_HOSTS=votre-domaine.fr,www.votre-domaine.fr
+DB_PATH=/app/data/db.sqlite3
+CORS_ALLOWED_ORIGINS=https://votre-domaine.fr,https://www.votre-domaine.fr
+```
+
+> Le fichier `.env` est écrit automatiquement par le pipeline Ondes HOST depuis ces variables.
+
+### CI/CD automatique (webhook)
+
+Le workflow `.github/workflows/deploy.yml` déclenche un redéploiement à chaque push sur `main`.  
+Configurer trois secrets GitHub (**Settings → Secrets → Actions**) :
+
+| Secret | Valeur |
+|--------|--------|
+| `ONDES_API_URL` | URL de l'instance Ondes HOST, ex. `https://ondes.monvps.fr` |
+| `ONDES_STACK_ID` | ID numérique du stack (visible dans l'URL du dashboard) |
+| `ONDES_WEBHOOK_TOKEN` | UUID affiché dans le panneau Stack Detail de l'app Flutter |
+
+### Premier déploiement
+
+1. Connecter le repo GitHub dans Ondes HOST (onglet GitHub Integration).
+2. Créer un nouveau stack pointant sur ce repo / branche `main`.
+3. Renseigner toutes les variables d'environnement ci-dessus.
+4. Cliquer **Deploy** — le pipeline clone, écrit `.env`, strip les conflits plateforme, et lance `docker compose up -d --build`.
+5. Configurer le vhost dans Ondes HOST pour pointer le domaine vers le port 8082.
