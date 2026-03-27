@@ -4,8 +4,9 @@
  */
 
 const API_CONFIG = {
-    // Modifier cette URL selon l'environnement
-    baseUrl: 'http://localhost:8000/api',
+    // Use relative path so the site works behind any domain / reverse-proxy.
+    // In development, point to http://localhost:8000/api if needed.
+    baseUrl: '/api',
     
     endpoints: {
         // Configuration

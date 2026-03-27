@@ -181,7 +181,7 @@
                     // Construire l'URL de l'image (peut être absolue ou relative)
                     let imageUrl = 'ressources/MjAyMjA0NjMxOGI5ODIwOGQxMzNkMTJjMDViZjE3YTdhZjBmZjY.avif';
                     if (event.image) {
-                        imageUrl = event.image.startsWith('http') ? event.image : `http://localhost:8000${event.image}`;
+                        imageUrl = event.image.startsWith('http') ? event.image : event.image;
                     }
                     const time = event.start_time ? SciotUtils.formatTime(event.start_time) : '';
                     const categoryName = event.category?.name || '';

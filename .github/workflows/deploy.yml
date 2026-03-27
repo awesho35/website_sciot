@@ -1,0 +1,48 @@
+name: Deploy to Ondes HOST
+
+# Triggered on every push to the main branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Trigger Ondes HOST redeploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger webhook deployment
+        # POST to the Ondes HOST webhook endpoint — no build step needed,
+        # the platform pulls the latest commit and rebuilds the Docker stack.
+        run: |
+          HTTP_STATUS=$(curl -s -o /tmp/response.json -w "%{http_code}" \
+            --max-time 30 \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.ONDES_WEBHOOK_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            "${{ secrets.ONDES_API_URL }}/api/stacks/${{ secrets.ONDES_STACK_ID }}/webhook/")
+
+          echo "Response: $(cat /tmp/response.json)"
+          echo "HTTP status: $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" -eq 200 ] || [ "$HTTP_STATUS" -eq 202 ]; then
+            echo "✅ Deployment triggered successfully"
+          elif [ "$HTTP_STATUS" -eq 409 ]; then
+            echo "⚠️  A deployment is already in progress — skipping"
+          else
+            echo "❌ Deployment trigger failed with status $HTTP_STATUS"
+            exit 1
+          fi
+
+# ── Required GitHub Secrets ──────────────────────────────────────────────────
+# Set these in your repository → Settings → Secrets and variables → Actions:
+#
+#   ONDES_API_URL        The base URL of your Ondes HOST instance
+#                        e.g. https://ondes.yourvps.com
+#
+#   ONDES_STACK_ID       The numeric ID of this stack in Ondes HOST
+#                        (visible in the dashboard URL: /stacks/42/...)
+#
+#   ONDES_WEBHOOK_TOKEN  The webhook_token UUID shown in the stack detail
+#                        panel of the Ondes HOST Flutter app
