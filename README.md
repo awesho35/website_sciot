@@ -90,5 +90,3 @@ git push
 ```
 
 ---
-
-*Projet développé avec ❤️ pour le Sciøt Cial Club.*
