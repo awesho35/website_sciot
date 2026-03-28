@@ -10,7 +10,7 @@ COPY css/ /usr/share/nginx/html/css/
 COPY js/ /usr/share/nginx/html/js/
 COPY ressources/ /usr/share/nginx/html/ressources/
 
-# Remove default nginx config; the main reverse-proxy nginx provides the routing
-RUN rm /etc/nginx/conf.d/default.conf 2>/dev/null || true
+# Serve static files on port 80 (the stack nginx reverse-proxies to this container)
+RUN printf 'server {\n    listen 80;\n    server_name _;\n    root /usr/share/nginx/html;\n    index index.html;\n    location / {\n        try_files $uri $uri/ /index.html;\n    }\n}\n' > /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
