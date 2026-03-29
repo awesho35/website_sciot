@@ -13,29 +13,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg shadow-sm glass-bar">
-    <div class="container">
-        <a class="navbar-brand text-primary" href="index.html">
-            <i class="bi bi-megaphone-fill me-2"></i>LE SCIøT CIAL CLUB
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link active" href="index.html">Accueil</a></li>
-                <li class="nav-item"><a class="nav-link" href="programmation.html">Programmation</a></li>
-                <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
-                <li class="nav-item"><a class="nav-link" href="jouerausciot.html">Jouer ici</a></li>
-            </ul>
-            <div class="d-flex ms-lg-4 align-items-center gap-3" id="nav-social-links">
-                <a href="#" class="text-primary fs-4"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="text-primary fs-4"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="text-primary fs-4"><i class="bi bi-youtube"></i></a>
-            </div>
-        </div>
-    </div>
-</nav>
+<header id="main-header"></header>
     <main class="container-fluid p-0">
         <div class="position-relative overflow-hidden bg-dark d-flex align-items-center justify-content-center" style="min-height: 50vh;">
             <img src="ressources/542230372_763789346415345_4832126966196685008_n.jpg" 
@@ -43,7 +21,7 @@
                  style="filter: blur(8px); transform: scale(1.1);" 
                  alt="Bannière Club">
             <div class="container position-relative z-1 py-5 text-center">
-                <h1 class="display-3 mb-4" style="color: white !important;"><b>Bienvenue au Club</b></h1>
+                <h1 class="display-3 mb-4 text-white fw-bold">Bienvenue au Club</h1>
                 <p class="lead text-white mb-5 opacity-75 mx-auto" style="max-width: 800px;">
                     Le Sciøt Cial Club, c’est Maud & Kiwi et leur super équipe. Le Ø du Sciøt, c’est pour rappeler les origines anglo-scandinaves de Sciotot. « Cial » comme social, parce que nous souhaitons créer un lieu de partage, et « Club » parce que… Bienvenue au Club !
                 </p>
@@ -52,7 +30,7 @@
         </div>
 
         <div class="row g-0 align-items-stretch">
-            <div class="col-12 col-lg-6 p-4 p-xl-5 d-flex flex-column" style="background-color: var(--bs-primary);">
+            <div class="col-12 col-lg-6 p-4 p-xl-5 d-flex flex-column scroll-wave-container" style="background: linear-gradient(135deg, var(--bs-primary) 0%, #6b3a28 100%);">
                 <div class="mb-4">
                     <h2 class="text-white fw-bold h3">CETTE SEMAINE</h2>
                     <div class="bg-white opacity-50" style="height: 2px; width: 60px;"></div>
@@ -110,8 +88,7 @@
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2586.326880004943!2d-1.854209523490772!3d49.59152287148281!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x480ced56dc03e387%3A0x2289c6e049f7907c!2s3%20Rte%20du%20Fort%2C%2050340%20Les%20Pieux!5e0!3m2!1sfr!2sfr!4v1710000000000!5m2!1sfr!2sfr" 
             allowfullscreen loading="lazy"></iframe>
         </div>
-
-        <div class="col-12 col-lg-2 p-4 d-flex align-items-center justify-content-center text-center" style="background-color: var(--bs-primary); color: white;">
+        <div class="col-12 col-lg-2 p-4 d-flex align-items-center justify-content-center text-center scroll-wave-container underwater-effect" style="background: linear-gradient(135deg, #7a3f2b 0%, #633525 100%); color: white;">
             <div>
                 <i class="bi bi-geo-alt fs-1 mb-3"></i>
 
@@ -135,29 +112,11 @@
 </section>
     </main>
 
-    <footer class="glass-bar footer-shadow py-3 mt-auto">
-        <div class="container">
-            <div class="row align-items-center g-3">
-                <div class="col-md-3 text-center text-md-start">
-                    <a href="tel:0233042456" class="text-primary fw-bold">02 33 04 24 56</a>
-                </div>
-                <div class="col-md-5 text-center">
-                    <span class="small opacity-75 text-dark"><i>Sciotot >> Cotentin >> Normandie</i></span>
-                </div>
-                <div class="col-md-4 d-flex align-items-center justify-content-center justify-content-md-end gap-3">
-                    <div class="d-flex gap-3">
-                        <a href="#" class="text-primary fs-5"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="text-primary fs-4"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="text-primary fs-4"><i class="bi bi-youtube"></i></a>
-                    </div>
-                    <a href="#" class="btn btn-outline-primary btn-sm px-3 py-2">CONDITIONS D'UTILISATION</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <footer id="main-footer" class="glass-bar footer-shadow py-3 mt-auto"></footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/api.js"></script>
+    <script src="/js/main.js"></script>
     <script>
         // Charger les événements de la semaine
         async function loadWeekEvents() {
@@ -237,49 +196,11 @@
             }
         }
         
-        // Charger la configuration du site
-        async function loadSiteConfig() {
-            try {
-                const config = await SciotAPI.getConfig();
-                if (!config) return;
-                
-                // Mettre à jour le téléphone du footer
-                const phoneLink = document.querySelector('footer a[href^="tel:"]');
-                if (phoneLink && config.phone) {
-                    phoneLink.textContent = config.phone;
-                    phoneLink.href = 'tel:' + config.phone.replace(/\s/g, '');
-                }
-            } catch (error) {
-                console.error('Erreur chargement config:', error);
-            }
-        }
-        
-        // Charger les réseaux sociaux
-        async function loadSocialLinks() {
-            try {
-                const response = await SciotAPI.getSocialLinks();
-                const links = response?.results || response || [];
-                if (!links || links.length === 0) return;
-                
-                const containers = document.querySelectorAll('.d-flex.gap-3, #nav-social-links');
-                containers.forEach(container => {
-                    if (container.querySelector('[class*="bi-instagram"], [class*="bi-facebook"], [class*="bi-youtube"]')) {
-                        container.innerHTML = links.map(link => 
-                            `<a href="${link.url}" target="_blank" class="text-primary fs-4"><i class="bi bi-${link.platform}"></i></a>`
-                        ).join('');
-                    }
-                });
-            } catch (error) {
-                console.error('Erreur chargement réseaux sociaux:', error);
-            }
-        }
-        
         // Initialisation
         document.addEventListener('DOMContentLoaded', () => {
             loadWeekEvents();
             loadCarousel();
-            loadSiteConfig();
-            loadSocialLinks();
+            // Les fonctions loadSiteConfig() et loadSocialLinks() sont maintenant appelées par main.js
         });
     </script>
 </body>
